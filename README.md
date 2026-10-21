@@ -277,6 +277,9 @@ This project demonstrates practical experience with:
 
 **GitHub Repository:**  
 https://github.com/Harshsaini0214/First-Deployment
+
+**Vercel Link:**
+https://sales-predict.vercel.app/
 ## Author
 
 **Harsh Saini**
