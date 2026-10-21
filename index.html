@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sales Prediction | Machine Learning</title>
+<style>
+:root{--bg:#0b1020;--panel:#121a2e;--panel2:#17213a;--text:#eef3ff;--muted:#aab6d3;--accent:#ff765d;--accent2:#ffb454;--line:#293552;--good:#7ce0b1}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#1a2746 0,#0b1020 55%);color:var(--text);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+.wrap{max-width:1120px;margin:auto;padding:28px 18px 60px}.hero{padding:30px 0 24px}.eyebrow{color:var(--accent2);font-weight:800;text-transform:uppercase;letter-spacing:.15em;font-size:.75rem}.hero h1{font-size:clamp(2rem,5vw,3.35rem);line-height:1.08;letter-spacing:-.04em;margin:12px 0}.hero p{color:var(--muted);max-width:680px;margin:0}.tag{display:inline-flex;border:1px solid var(--line);border-radius:99px;padding:5px 10px;color:var(--muted);font-size:.8rem;margin-top:18px}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-top:16px}.panel{background:linear-gradient(145deg,rgba(23,33,58,.96),rgba(18,26,46,.96));border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 18px 50px #0002}.panel h2{margin:0 0 5px;font-size:1.15rem}.sub{color:var(--muted);font-size:.88rem;margin:0 0 20px}.fields{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.field label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:7px}.field input,.field select{width:100%;background:#0d1427;border:1px solid #344260;border-radius:10px;padding:12px;color:var(--text);font:inherit;min-width:0}.field input:focus,.field select:focus{outline:2px solid var(--accent);border-color:transparent}.wide{grid-column:1/-1}.btn{border:0;border-radius:11px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#1b1020;font-weight:850;font-size:.96rem;padding:13px 18px;cursor:pointer;width:100%;margin-top:17px}.btn:disabled{opacity:.6;cursor:wait}.result{margin-top:18px;border-radius:14px;background:#0c1427;border:1px solid var(--line);padding:18px;min-height:95px}.result .big{font-size:2.3rem;line-height:1.2;font-weight:850;color:var(--good)}.muted{color:var(--muted)}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}.stat{padding:16px;border-radius:14px;border:1px solid var(--line);background:#10182b}.stat small{display:block;color:var(--muted)}.stat strong{font-size:1.25rem;display:block;margin-top:5px}.tablewrap{overflow:auto;margin-top:12px}table{width:100%;border-collapse:collapse;font-size:.88rem}th,td{text-align:left;padding:10px 9px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--muted);font-weight:700}.pill{display:inline-block;border-radius:99px;background:#153b32;color:var(--good);padding:3px 9px;font-size:.75rem}.section{margin-top:18px}.history-item{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:10px 0}.error{color:#ff9c9c}.footer{text-align:center;color:var(--muted);font-size:.8rem;margin-top:28px}
+@media(max-width:780px){.grid{grid-template-columns:1fr}.fields{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.wrap{padding:20px 13px 40px}.panel{padding:17px}}
+</style>
+</head>
+<body><main class="wrap">
+<header class="hero"><div class="eyebrow">Predictive analytics · Regression models</div><h1>Sales Prediction<br><span style="color:var(--accent)">Using Machine Learning</span></h1><p>Estimate product sales from TV, radio, and newspaper advertising budgets. Compare regression models and explore the dataset in one clean dashboard.</p><div class="tag">● Model training runs automatically from the bundled dataset</div></header>
+<div class="grid">
+<section class="panel"><h2>Make a prediction</h2><p class="sub">Enter advertising spend for each channel. Values must be between 0 and 1,000.</p>
+<form id="predict-form"><div class="fields">
+<div class="field"><label for="tv">TV budget</label><input id="tv" type="number" min="0" max="1000" step=".1" value="150" required></div>
+<div class="field"><label for="radio">Radio budget</label><input id="radio" type="number" min="0" max="1000" step=".1" value="25" required></div>
+<div class="field"><label for="newspaper">Newspaper budget</label><input id="newspaper" type="number" min="0" max="1000" step=".1" value="30" required></div>
+<div class="field wide"><label for="model">Regression model</label><select id="model"><option value="">Best-performing model (recommended)</option><option>Linear Regression</option><option>Decision Tree Regressor</option><option>Random Forest Regressor</option></select></div>
+</div><button class="btn" id="predict-btn" type="submit">Calculate predicted sales →</button></form>
+<div class="result" id="result" aria-live="polite"><span class="muted">Your prediction will appear here.</span></div>
+</section>
+<section class="panel"><h2>Model performance</h2><p class="sub">Models are evaluated on a held-out test split (80/20).</p><div class="cards" id="stats"><div class="stat"><small>Dataset rows</small><strong>Loading…</strong></div><div class="stat"><small>Best model</small><strong>Loading…</strong></div><div class="stat"><small>Best R²</small><strong>Loading…</strong></div></div><div class="tablewrap"><table><thead><tr><th>Model</th><th>MAE</th><th>RMSE</th><th>R²</th></tr></thead><tbody id="metrics"><tr><td colspan="4" class="muted">Loading model metrics…</td></tr></tbody></table></div><p class="muted" style="font-size:.8rem;margin-bottom:0">R² is a test-set metric, not a guarantee of future accuracy.</p></section>
+</div>
+<section class="panel section"><h2>Dataset overview</h2><p class="sub">Quick summary of the bundled advertising dataset.</p><div class="cards" id="summary-cards"><div class="stat"><small>Status</small><strong>Loading…</strong></div></div><div class="tablewrap"><table><thead><tr><th>TV</th><th>Radio</th><th>Newspaper</th><th>Sales</th></tr></thead><tbody id="sample"><tr><td colspan="4" class="muted">Loading sample…</td></tr></tbody></table></div></section>
+<section class="panel section"><h2>Recent predictions</h2><p class="sub">Stored in this browser only. Clearing browser storage clears this history.</p><div id="history"><p class="muted">No predictions yet.</p></div><button class="btn" id="clear-history" type="button" style="max-width:220px">Clear local history</button></section>
+<div class="footer">Sales Prediction · Python · FastAPI · scikit-learn</div>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+function fmt(n){return Number(n).toLocaleString(undefined,{maximumFractionDigits:3});}
+async function loadDashboard(){
+  try{
+    const response=await fetch('/api/summary');
+    const data=await response.json();
+    if(!response.ok) throw new Error(data.detail||'Could not load summary.');
+    $('stats').innerHTML=`<div class="stat"><small>Valid dataset rows</small><strong>${data.rows}</strong></div><div class="stat"><small>Best model</small><strong style="font-size:1rem">${data.best_model}</strong></div><div class="stat"><small>Best test R²</small><strong>${fmt(data.model_metrics[data.best_model]['R2 Score'])}</strong></div>`;
+    $('metrics').innerHTML=Object.entries(data.model_metrics).map(([name,m])=>`<tr><td>${name}${name===data.best_model?' <span class="pill">Best</span>':''}</td><td>${fmt(m.MAE)}</td><td>${fmt(m.RMSE)}</td><td>${fmt(m['R2 Score'])}</td></tr>`).join('');
+    $('summary-cards').innerHTML=Object.entries(data.summary).map(([name,s])=>`<div class="stat"><small>${name} · mean</small><strong>${fmt(s.mean)}</strong><small>Range ${fmt(s.min)}–${fmt(s.max)}</small></div>`).join('');
+    $('sample').innerHTML=data.sample.map(r=>`<tr><td>${fmt(r.TV)}</td><td>${fmt(r.Radio)}</td><td>${fmt(r.Newspaper)}</td><td>${fmt(r.Sales)}</td></tr>`).join('');
+  }catch(e){
+    $('stats').innerHTML=`<p class="error">Dashboard could not load: ${e.message}</p>`;
+    $('metrics').innerHTML='<tr><td colspan="4" class="error">Check that dataset/advertising.csv is present and correctly formatted.</td></tr>';
+  }
+}
+function readHistory(){try{return JSON.parse(localStorage.getItem('sales-prediction-history')||'[]')}catch{return []}}
+function renderHistory(){
+  const items=readHistory();
+  $('history').innerHTML=items.length?items.map(x=>`<div class="history-item"><div><strong>${fmt(x.prediction)} units</strong><div class="muted" style="font-size:.8rem">TV ${fmt(x.tv)} · Radio ${fmt(x.radio)} · Newspaper ${fmt(x.newspaper)}</div><div class="muted" style="font-size:.78rem">${x.model} · ${new Date(x.time).toLocaleString()}</div></div></div>`).join(''):'<p class="muted">No predictions yet.</p>';
+}
+$('predict-form').addEventListener('submit',async(e)=>{
+  e.preventDefault();
+  const btn=$('predict-btn'); btn.disabled=true; btn.textContent='Calculating…';
+  $('result').innerHTML='<span class="muted">Running prediction…</span>';
+  const payload={tv:Number($('tv').value),radio:Number($('radio').value),newspaper:Number($('newspaper').value),model_name:$('model').value||null};
+  if(Object.values(payload).slice(0,3).some(v=>!Number.isFinite(v)||v<0||v>1000)){
+    $('result').innerHTML='<span class="error">Enter valid budgets from 0 to 1,000.</span>';btn.disabled=false;btn.textContent='Calculate predicted sales →';return;
+  }
+  try{
+    const response=await fetch('/api/predict',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const data=await response.json(); if(!response.ok)throw new Error(data.detail||'Prediction failed.');
+    $('result').innerHTML=`<div class="muted">Predicted sales</div><div class="big">${fmt(data.prediction)} <span style="font-size:1rem">units</span></div><div class="muted">Model: ${data.model_name} · Test R²: ${fmt(data.metrics['R2 Score'])}</div>`;
+    const items=readHistory();items.unshift({...payload,model:data.model_name,prediction:data.prediction,time:new Date().toISOString()});localStorage.setItem('sales-prediction-history',JSON.stringify(items.slice(0,20)));renderHistory();
+  }catch(e){$('result').innerHTML=`<span class="error">${e.message}</span>`}
+  finally{btn.disabled=false;btn.textContent='Calculate predicted sales →'}
+});
+$('clear-history').addEventListener('click',()=>{localStorage.removeItem('sales-prediction-history');renderHistory()});
+loadDashboard();renderHistory();
+</script></body></html>
