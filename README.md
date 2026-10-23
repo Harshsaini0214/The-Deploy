@@ -122,7 +122,7 @@ Sales-Prediction-Vercel-Patch/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Harshsaini0214/First-Deployment
+git clone https://github.com/Harshsaini0214/The-Deploy
 ```
 
 Navigate to the project directory:
@@ -276,7 +276,7 @@ This project demonstrates practical experience with:
 ## Repository
 
 **GitHub Repository:**  
-https://github.com/Harshsaini0214/First-Deployment
+https://github.com/Harshsaini0214/The-Deploy
 
 **Vercel Link:**
 https://sales-predict.vercel.app/
